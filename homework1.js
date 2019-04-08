@@ -4,43 +4,45 @@ var canvas;
 var gl;
 
 var numVertices  = 36;
-
-var numChecks = 8;
+var numChecks    = 8;
 
 var program;
 
 var c;
 
-var flag = true;
+var flag         = true;
 
-var pointsArray = [];
-var colorsArray = [];
+var pointsArray  = [];
+var colorsArray  = [];
 
-var vertices = [
-    vec4( -0.5, -0.5,  0.5, 1.0 ),
-    vec4( -0.5,  0.5,  0.5, 1.0 ),
-    vec4( 0.5,  0.5,  0.5, 1.0 ),
-    vec4( 0.5, -0.5,  0.5, 1.0 ),
-    vec4( -0.5, -0.5, -0.5, 1.0 ),
-    vec4( -0.5,  0.5, -0.5, 1.0 ),
-    vec4( 0.5,  0.5, -0.5, 1.0 ),
-    vec4( 0.5, -0.5, -0.5, 1.0 )
-];
+var vertices     = [
+        vec4( -0.5, -0.5,  0.5, 1.0 ),
+        vec4( -0.5,  0.5,  0.5, 1.0 ),
+        vec4(  0.5,  0.5,  0.5, 1.0 ),
+        vec4(  0.5, -0.5,  0.5, 1.0 ),
+        vec4( -0.5, -0.5, -0.5, 1.0 ),
+        vec4( -0.5,  0.5, -0.5, 1.0 ),
+        vec4(  0.5,  0.5, -0.5, 1.0 ),
+        vec4(  0.5, -0.5, -0.5, 1.0 )
+    ];
 
 var vertexColors = [
-    vec4( 0.0, 0.0, 0.0, 1.0 ),  // black
-    vec4( 1.0, 0.0, 0.0, 1.0 ),  // red
-    vec4( 1.0, 1.0, 0.0, 1.0 ),  // yellow
-    vec4( 0.0, 1.0, 0.0, 1.0 ),  // green
-    vec4( 0.0, 0.0, 1.0, 1.0 ),  // blue
-    vec4( 1.0, 0.0, 1.0, 1.0 ),  // magenta
-    vec4( 0.0, 1.0, 1.0, 1.0 ),  // white
-    vec4( 0.0, 1.0, 1.0, 1.0 )   // cyan
-];
+        vec4( 0.0, 0.0, 0.0, 1.0 ),  // black
+        vec4( 1.0, 0.0, 0.0, 1.0 ),  // red
+        vec4( 1.0, 1.0, 0.0, 1.0 ),  // yellow
+        vec4( 0.0, 1.0, 0.0, 1.0 ),  // green
+        vec4( 0.0, 0.0, 1.0, 1.0 ),  // blue
+        vec4( 1.0, 0.0, 1.0, 1.0 ),  // magenta
+        vec4( 0.0, 1.0, 1.0, 1.0 ),  // white
+        vec4( 0.0, 1.0, 1.0, 1.0 )   // cyan
+    ];
+
 
 var thetaLoc;
 
+
 function quad(a, b, c, d) {
+    /* Each quadralater  */
      pointsArray.push(vertices[a]);
      colorsArray.push(vertexColors[a]);
 
@@ -49,6 +51,7 @@ function quad(a, b, c, d) {
 
      pointsArray.push(vertices[c]);
      colorsArray.push(vertexColors[a]);
+
 
      pointsArray.push(vertices[a]);
      colorsArray.push(vertexColors[a]);
@@ -59,6 +62,7 @@ function quad(a, b, c, d) {
      pointsArray.push(vertices[d]);
      colorsArray.push(vertexColors[a]);
 }
+
 
 function colorCube()
 {
@@ -109,6 +113,7 @@ window.onload = function init() {
 
     render();
 }
+
 
 var render = function() {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
