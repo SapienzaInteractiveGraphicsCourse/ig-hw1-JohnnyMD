@@ -1,7 +1,7 @@
 ## Interactive Graphics - 2019 - HW1
 
-><u>Student</u>: Ion Tataru
-><u>Student ID</u>: 1595331
+><u>Student</u>: Ion Tataru;
+><u>Student ID</u>: 1595331;
 
 
 
