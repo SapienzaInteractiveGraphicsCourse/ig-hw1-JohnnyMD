@@ -13,7 +13,7 @@ controllable with buttons, sliders or menus.
 
 #### Solution T1
 
->   Todos . . .
+>   TODO . . .
 
 
 
@@ -26,7 +26,7 @@ control them with sliders.
 
 #### Solution T2
 
->   Todos . . .
+>   TODO . . .
 
 
 
@@ -38,7 +38,7 @@ Define an orthographic projection with the planes near and far controlled by sli
 
 #### Solution T3
 
->   Todos . . .
+>   TODO . . .
 
 
 
@@ -52,7 +52,7 @@ Points 5 to 7 use the splitted window with two different projections
 
 #### Solution T4
 
->   Todos . . .
+>   TODO . . .
 
 
 
@@ -67,7 +67,7 @@ assign to each vertex a normal.
 
 #### Solution T5
 
->   Todos . . .
+>   TODO . . .
 
 
 
@@ -82,7 +82,7 @@ them.
 
 #### Solution T6
 
->   Todos . . .
+>   TODO . . .
 
 
 
@@ -97,15 +97,4 @@ computed using the lighting model and the texture
 
 #### Solution T7
 
->   Todos . . .
-
-
-
-
-
-
-
-
-
-
-
+>   TODO . . .
