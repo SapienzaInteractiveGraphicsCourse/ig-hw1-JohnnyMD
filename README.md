@@ -89,7 +89,6 @@ them.
 
 
 
-
 ### Task 7
 
 Add a procedural texture (your choice) on each face, with the pixel color a combination of the color
