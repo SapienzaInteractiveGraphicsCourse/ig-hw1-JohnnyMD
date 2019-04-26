@@ -1,42 +1,168 @@
 <!DOCTYPE html>
 <html>
+    <head>
+	    <meta  		charset="utf-8">
+        <title>HW1 - IG - WebGL</title>
+        <meta  		name = "viewport"         content="width=device-width, initial-scale=1.0" templatewidth="1038">
+        <link      	rel="shortcut icon"        href="ig_cube.ico">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700|PT+Serif:400,400i&subset=latin-ext" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="style/style.css">
 
-<script id="vertex-shader" type="x-shader/x-vertex">
 
-attribute  vec4 vPosition;
-attribute  vec4 vColor;
+        <script id="vertex-shader" type="x-shader/x-vertex">
+            attribute   vec4 vPosition;
+            attribute   vec4 vColor;
 
-varying vec4 fColor;
+            varying     vec4 fColor;
 
-void main()
-{
-    fColor      = vColor;
-    gl_Position = vPosition;
-}
-</script>
+            uniform mat4 modelViewMatrix;
+            uniform mat4 projectionMatrix;
+            
+            uniform vec3 t;    // translation vector
+            uniform vec3 s;    // scale factor vector
 
-<script id="fragment-shader" type="x-shader/x-fragment">
+            // This matrices are column-major !!!
+            mat4 T = mat4(  1.0,  0.0,  0.0, 0.0,
+                            0.0,  1.0,  0.0, 0.0,
+                            0.0,  0.0,  1.0, 0.0,
+                            t.x,  t.y,  t.z, 1.0 );     // Translation Matrix
 
-precision mediump float;
 
-varying vec4 fColor;
+            mat4 S = mat4(  s.x,  0.0,  0.0, 0.0,
+                            0.0,  s.y,  0.0, 0.0,
+                            0.0,  0.0,  s.z, 0.0,
+                            0.0,  0.0,  0.0, 1.0 );     // Translation Matrix
 
-void
-main()
-{
-    gl_FragColor = fColor;
 
-}
-</script>
+            void main()
+            {
+                fColor      = vColor;
+                gl_Position = T * S * projectionMatrix * modelViewMatrix * vPosition;
+            }
+        </script>
 
-<script type="text/javascript" src="Common/webgl-utils.js"></script>
-<script type="text/javascript" src="Common/initShaders.js"></script>
-<script type="text/javascript" src="Common/MV.js"></script>
-<script type="text/javascript" src="homework1.js"></script>
+        <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
 
-<body>
-<canvas id="gl-canvas" width="1024" height="1024">
-    Oops ... your browser doesn't support the HTML5 canvas element
-</canvas>
-</body>
+            varying  vec4 fColor;
+
+            void
+            main()
+            {
+                gl_FragColor = fColor;
+
+            }
+        </script>
+
+
+        <script type="text/javascript" src="Common/webgl-utils.js"></script>
+        <script type="text/javascript" src="Common/initShaders.js"></script>
+        <script type="text/javascript" src="Common/MV.js"></script>
+        <script type="text/javascript" src="homework1.js"></script>
+
+		<script src="Common/jquery-3.4.0.min.js"></script>
+		<script src="Common/general_purpose_scripts.js"></script>
+
+    </head>
+    <body>
+        <!-- ======================== CANVAS ======================== -->
+    	<p id="canvas_1" align="center">
+	        <canvas id="gl-canvas" height="1080" width="1080">
+	            Oops ... your browser doesn't support the HTML5 canvas element
+	        </canvas>
+		</p>
+
+    
+        <!-- ====================== CONTROL PANEL == INIT =========== -->
+        <div id="control_panel">
+            
+            <div class="form-group">
+                <label for="range_phi">Phi:</label>
+                <input type="range"  id="range_phi"  name="range_phi" oninput="updateRangeInput(this)"  min="-90"  value="25.0"  max="90"  step="1.0">
+                <input type="text">
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label for="range_theta">Theta:</label>
+                <input type="range"  id="range_theta"  name="range_theta" oninput="updateRangeInput(this)"  min="-90"  value="25.0"  max="90"  step="1.0">
+                <input type="text">
+            </div>
+            <br/>
+            
+            <div class="form-group">
+                <label for="range_radius">Radius:</label>
+                <input type="range"  id="range_radius"  name="range_radius" oninput="updateRangeInput(this)"  min="0.00"  value="1.0"  max="10.0"  step="0.1">
+                <input type="text">
+            </div>
+            <br/>
+            
+<!--             <div class="form-group">
+                <label for="range_aspect">Aspect:</label>
+                <input type="range"  id="range_aspect"  name="range_aspect" oninput="updateRangeInput(this)"  min="0.05"  value="1.0"  max="2.0"  step="0.05">
+                <input type="text">
+            </div>
+            <br/> -->
+
+            <div class="form-group">
+                <label for="range_fovy">Fovy:</label>
+                <input type="range"  id="range_fovy"  name="range_fovy" oninput="updateRangeInput(this)"  min="0.0"  value="90.0"  max="120.0"  step="1.0">
+                <input type="text">
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label for="range_zNear">zNear:</label>
+                <input type="range"  id="range_zNear"  name="range_zNear" oninput="updateRangeInput(this)"  min="-1.0"  value="-1.0"  max="2.0"  step="0.02">
+                <input type="text">
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label for="range_zFar">zFar:</label>
+                <input type="range"  id="range_zFar"  name="range_zFar" oninput="updateRangeInput(this)"  min="2.0001"  value="3.0"  max="5.0"  step="0.02">
+                <input type="text">
+            </div>
+            <br/>
+            
+            
+            <!-- TRANSLATION range sliders -->
+            <div class="form-group">
+                <label for="range_translateX">Translate-X:</label>
+                <input type="range"  id="range_translateX"  name="range_translateX" oninput="updateRangeInput(this)"  min="-10.0"  value="0.0"  max="10.0"  step="0.1">
+                <input type="text">
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label for="range_translateY">Translate-Y:</label>
+                <input type="range"  id="range_translateY"  name="range_translateY" oninput="updateRangeInput(this)"  min="-10.0"  value="0.0"  max="10.0"  step="0.1">
+                <input type="text">
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label for="range_translateZ">Translate-Z:</label>
+                <input type="range"  id="range_translateZ"  name="range_translateZ" oninput="updateRangeInput(this)"  min="-10.0"  value="0.0"  max="10.0"  step="0.1">
+                <input type="text">
+            </div>
+            <br/>
+
+            <!-- SCALE range slider (uniform scaling) -->
+            <div class="form-group">
+                <label for="range_scale">Scale factor:</label>
+                <input type="range"  id="range_scale"  name="range_scale" oninput="updateRangeInput(this)"  min="0.0"  value="1.0"  max="10.0"  step="0.1">
+                <input type="text">
+            </div>
+            <br/>
+
+
+
+        </div>
+        <!-- ====================== CONTROL PANEL == FINE =========== -->
+
+
+    </body>
+
+
 </html>
