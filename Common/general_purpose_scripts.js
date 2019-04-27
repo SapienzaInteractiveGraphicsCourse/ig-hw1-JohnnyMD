@@ -7,3 +7,4 @@ function updateRangeInput(elem) {
 // 	$(elem).val($(elem).prev().val());
 // 	console.log("prev_elem_val = " + $(elem).prev().val());
 // }
+

@@ -3,7 +3,7 @@
     <head>
 	    <meta  		charset="utf-8">
         <title>HW1 - IG - WebGL</title>
-        <meta  		name = "viewport"         content="width=device-width, initial-scale=1.0" templatewidth="1038">
+        <meta  		name = "viewport"         content="width=device-width, initial-scale=1.0">
         <link      	rel="shortcut icon"        href="ig_cube.ico">
         <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700|PT+Serif:400,400i&subset=latin-ext" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="style/style.css">
@@ -13,11 +13,18 @@
             attribute   vec4 vPosition;
             attribute   vec4 vColor;
 
+            attribute   vec3 vNormal;
+
             varying     vec4 fColor;
 
             uniform mat4 modelViewMatrix;
             uniform mat4 projectionMatrix;
+
+            uniform vec4  ambientProduct,  diffuseProduct,  specularProduct;
+            uniform vec4  lightPosition;
+            uniform float shininess;
             
+
             uniform vec3 t;    // translation vector
             uniform vec3 s;    // scale factor vector
 
@@ -36,8 +43,37 @@
 
             void main()
             {
-                fColor      = vColor;
-                gl_Position = T * S * projectionMatrix * modelViewMatrix * vPosition;
+                vec3 pos = -(modelViewMatrix * vPosition).xyz;
+                
+                // fixed light postion
+                vec3 light      = lightPosition.xyz;
+                vec3 L          = normalize( light - pos );
+
+                vec3 E          = normalize( -pos );
+                vec3 H          = normalize( L + E );
+                
+                vec4 NN         = vec4( vNormal, 0 );
+
+                // Transform vertex normal into eye coordinates
+                vec3 N          = normalize( (modelViewMatrix * NN).xyz);
+
+                // Compute terms in the illumination equation
+                vec4 ambient    = ambientProduct;
+
+                float Kd        = max( dot(L, N), 0.0 );
+                vec4  diffuse   = Kd * diffuseProduct;
+
+                float Ks        = pow( max(dot(N, H), 0.0), shininess );
+                vec4  specular  = Ks * specularProduct;
+                
+                if( dot(L, N) < 0.0 ) {
+                    specular = vec4(0.0, 0.0, 0.0, 1.0);
+                } 
+
+
+                gl_Position  = T * S * projectionMatrix * modelViewMatrix * vPosition;
+                fColor       =  ambient + diffuse + specular ; // + vColor;
+                fColor.a     = 1.0;      // opaque
             }
         </script>
 
@@ -100,7 +136,7 @@
 
             <!-- SCALE range slider (uniform scaling) -->
             <div class="form-group">
-                <label for="range_scale">Scale factor:</label>
+                <label for="range_scale">Scale Factor:</label>
                 <input type="range"  id="range_scale"  name="range_scale" oninput="updateRangeInput(this)"  min="0.0"  value="1.0"  max="10.0"  step="0.1">
                 <input type="text">
             </div>
@@ -150,14 +186,23 @@
             <br/>
 
             <div class="form-group">
-                <label for="range_zFar">zFar:</label>
+                <label for="shadingModel">zFar:</label>
                 <input type="range"  id="range_zFar"  name="range_zFar" oninput="updateRangeInput(this)"  min="2.0001"  value="3.0"  max="5.0"  step="0.02">
                 <input type="text">
             </div>
             <br/>
+
+
+            <!-- Shading model select -->
+            <div class="form-group">
+                <label for="shadingModel">Shading Model:</label>
+                <select id="shadingModel" name="shadingModel">
+                    <option value="0" selected="selected">Gouraud</option>
+                    <option value="1">Phong</option>
+                </select>
+            </div>
+            <br/>
             
-
-
 
         </div>
         <!-- ====================== CONTROL PANEL == FINE =========== -->
