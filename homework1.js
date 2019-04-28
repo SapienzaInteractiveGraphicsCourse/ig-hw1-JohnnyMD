@@ -18,7 +18,7 @@ var normalsArray    = [];
 var texCoordsArray  = [];
 
 
-var aspect;                  // viewport aspect ratio
+var aspect = 0.5;                  // viewport aspect ratio
 var fovy         =  90.0;    // field-of-view in Y direction angle (°)
 var phi          =  25.0 * Math.PI / 180.0;
 var theta        =  25.0 * Math.PI / 180.0;
@@ -38,11 +38,9 @@ var translationVector = [ 0, 0, 0 ];
 var scaleFactor       = 1;
 var scaleVector       = [ 1, 1, 1 ];
 
-
 // LookAt fixed parameters 
 const at         = vec3(0.0, 0.0, 0.0);     // the camera looks at the center of the object
 const up         = vec3(0.0, 0.2, 0.0);     // the camera orientation (Y) 
-
 
 // Lighting and Shading
 var defaultShadingModel = "1";                // 0 - Gouraud; 1 - Phong;
@@ -58,11 +56,7 @@ var materialDiffuse   = vec4( 1.0,  0.8,  0.0,  1.0);
 var materialSpecular  = vec4( 1.0,  0.8,  0.0,  1.0 );
 var materialShininess = 32.0;
 
-
 var ambientColor, diffuseColor, specularColor;
-
-
-
 
 var vertices     = [
         vec4( -0.2, -0.2,    0.2,   1.0 ),  // 0  // (x, y, z, _) //
@@ -180,8 +174,6 @@ function quad(a, b, c, d) {
 }
 
 
-
-
 function colorCube()
 {
     quad( 1, 0, 3, 2 );
@@ -218,9 +210,6 @@ window.onload  =  function init() {
 
     // Set the viewport properties
     gl.viewport( 0, 0, canvas.width, canvas.height );
-
-    // Init the aspect
-    aspect = canvas.width / canvas.height;    console.log("aspect = " + aspect);
 
     // Clear the screen area where to draw (use clip coordinates)(alpha component = 1 --- opaque)
     gl.clearColor( 1.0, 1.0, 1.0,  1.0 );
@@ -261,7 +250,10 @@ window.onload  =  function init() {
     document.getElementById("range_fovy").oninput       = function(event) {
         fovy = event.target.value;
     };
-
+    
+    document.getElementById("range_aspect").oninput       = function(event) {
+        aspect = 0.5 * event.target.value;
+    };
 
     document.getElementById("range_scale").oninput      = function(event) {
         scaleFactor = event.target.value;
@@ -345,7 +337,6 @@ var render = function() {
 
     const width  = gl.canvas.width;
     const height = gl.canvas.height;
-    const aspect = (width / 2) / height;  // = 1;
 
     // draw left scene ( ORTHOGRAPHIC projection )
     {
