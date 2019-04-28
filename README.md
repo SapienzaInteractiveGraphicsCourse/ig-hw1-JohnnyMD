@@ -174,7 +174,7 @@ var materialSpecular  = vec4( 1.0,  0.8,  0.0,  1.0 );
 var materialShininess = 32.0;  						// specular component's shininess
 ```
 
-![1556360515994](img\1556360515994.png)
+![1556360515994](img/1556360515994.png)
 
 
 
@@ -192,7 +192,7 @@ The switching is done by selecting the desired shading model to switch on. A sel
 
 The Gouraud Shading Model is less realistic, but more efficient in terms of calculations (*<u>per-vertex</u> color computation*).  the vertex shader must determine a color for each vertex and pass the color as an **out** variable to the fragment shader.
 
-![1556486378548](img\1556486378548.png)
+![1556486378548](img/1556486378548.png)
 
 On the other side, Phong Shading Model much more realistic, but less efficient in terms of computations (*<u>per-fragment</u> color computation*).  The vertex shader provides the normal and position data as **out** variables to the fragment shader. The fragment shader then interpolates these variables and computes the color. CPU - GPU data transferring overloading is possible for complex object models.
 
