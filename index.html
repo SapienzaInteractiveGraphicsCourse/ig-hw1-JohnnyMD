@@ -75,7 +75,7 @@
                     specular = vec4(0.0, 0.0, 0.0, 1.0);
                 } 
 
-                fTexCoord   = vTexCoord;
+                fTexCoord    = vTexCoord;
 
                 gl_Position  = T * S * projectionMatrix * modelViewMatrix * vPosition;
                 fColor       =  ambient + diffuse + specular + vColor;
@@ -277,7 +277,7 @@
                     <input type="text">
                 </div>
                 <br/>
-                
+
                 <div class="form-group">
                     <label for="range_aspect">Aspect:</label>
                     <input type="range"  id="range_aspect"  name="range_aspect" onchange="updateRangeInput(this)"  min="0.5"  value="1.0"  max="2.0"  step="0.05">
@@ -291,6 +291,19 @@
                     <input type="text">
                 </div>
                 <br/>
+
+                <div class="form-group">
+                    <label for="range_right">Left | Right:</label>
+                    <input type="range"  id="range_right"  name="range_right" onchange="updateRangeInput(this)"  min="1.0"  value="1.0"  max="10.0"  step="0.02">
+                    <input type="text">
+                </div>
+                <br/>
+
+                <div class="form-group">
+                    <label for="range_top">Top | Bottom:</label>
+                    <input type="range"  id="range_top"  name="range_top" onchange="updateRangeInput(this)"  min="1.0"  value="1.0"  max="10.0"  step="0.02">
+                    <input type="text">
+                </div>
             </div>
 
             <div> 

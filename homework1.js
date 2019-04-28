@@ -8,23 +8,24 @@ var numChecks    = 8;
 
 var program;
 
-var c;
-
-var flag         = true;
-
 var pointsArray     = [];
 var colorsArray     = [];
 var normalsArray    = [];
 var texCoordsArray  = [];
 
 
-var aspect = 0.5;                  // viewport aspect ratio
+var aspect       =  0.5;     // viewport aspect ratio
 var fovy         =  90.0;    // field-of-view in Y direction angle (°)
 var phi          =  25.0 * Math.PI / 180.0;
 var theta        =  25.0 * Math.PI / 180.0;
 var zNear        = -1.0 / 2 * (-1); // distance measured
 var zFar         =  3.0 / 2;        // from CAMERA
 var radius       =  1.0;
+
+var ytop         =  1;
+var bottom       = -ytop;
+var right        =  ytop * aspect;
+var left         = -right;
 
 var dr           =  5.0 * Math.PI / 180.0;
 
@@ -253,7 +254,17 @@ window.onload  =  function init() {
     document.getElementById("range_fovy").oninput       = function(event) {
         fovy = event.target.value;
     };
-    
+
+    document.getElementById("range_right").oninput       = function(event) {
+        right   =  event.target.value / 2;
+        left    = -event.target.value / 2;
+    };
+
+    document.getElementById("range_top").oninput       = function(event) {
+        ytop    =  event.target.value / 2;
+        bottom  = -event.target.value / 2;
+    };
+
     document.getElementById("range_aspect").oninput       = function(event) {
         aspect = 0.5 * event.target.value;
     };
@@ -305,7 +316,7 @@ var render = function() {
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // update the eye position (polar coordinates)
+        // update the eye position (polar coordinates)(view position)
         eye = vec3( radius * Math.sin(theta) * Math.cos(phi),
                     radius * Math.sin(theta) * Math.sin(phi),
                     radius * Math.cos(theta) );
@@ -342,13 +353,8 @@ var render = function() {
     const height = gl.canvas.height;
 
     // draw left scene ( ORTHOGRAPHIC projection )
-    {
-        const top         =  1;
-        const bottom      = -top;
-        const right       =  top * aspect;
-        const left        = -right;
-        
-        const projectionMatrix  =  ortho(left, right, bottom, top, zNear, zFar);
+    {        
+        const projectionMatrix  =  ortho(left, right, bottom, ytop, zNear, zFar);
         
         gl.clearColor(1, 1, 1, 1);
         
