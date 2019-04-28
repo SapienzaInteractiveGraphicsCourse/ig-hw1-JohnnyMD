@@ -12,16 +12,14 @@ var c;
 
 var flag         = true;
 
-var pointsArray  = [];
-var colorsArray  = [];
-var normalsArray = [];
-
-var thetaLoc;
-
+var pointsArray     = [];
+var colorsArray     = [];
+var normalsArray    = [];
+var texCoordsArray  = [];
 
 
-var  aspect;                // viewport aspect ratio
-var  fovy        = 90.0;    // field-of-view in Y direction angle (°)
+var aspect;                  // viewport aspect ratio
+var fovy         =  90.0;    // field-of-view in Y direction angle (°)
 var phi          =  25.0 * Math.PI / 180.0;
 var theta        =  25.0 * Math.PI / 180.0;
 var zNear        = -1.0 / 2 * (-1); // distance measured
@@ -60,6 +58,7 @@ var materialDiffuse   = vec4( 1.0,  0.8,  0.0,  1.0);
 var materialSpecular  = vec4( 1.0,  0.8,  0.0,  1.0 );
 var materialShininess = 32.0;
 
+
 var ambientColor, diffuseColor, specularColor;
 
 
@@ -87,8 +86,46 @@ var vertexColors = [
         vec4(  0.0,  1.0,  1.0,  1.0 )   // cyan
     ];
 
+var texCoord = [
+        vec2(0, 0),
+        vec2(0, 1),
+        vec2(1, 1),
+        vec2(1, 0)
+    ];
 
 
+var texSize = 16;
+var image;
+
+newImage(texSize);
+
+function newImage(textureSize){
+    // Create a checkerboard pattern using floats
+    var imageArr = new Array();
+    for (var i =0; i<textureSize; i++){
+        imageArr[i] = new Array();
+    }
+    for (var i =0; i<textureSize; i++){
+        for ( var j = 0; j < textureSize; j++){
+           imageArr[i][j] = new Float32Array(4);
+        }
+    }
+    for (var i =0; i<textureSize; i++) for (var j=0; j<textureSize; j++) {
+        var c = (((i & 0x8) == 0) ^ ((j & 0x8)  == 0));
+        imageArr[i][j] = [c, c, c, 1];
+    }
+
+
+    // Convert floats to ubytes for texture
+    image = new Uint8Array(4 * texSize * texSize);
+    for (var i=0; i<textureSize; i++){
+        for (var j=0; j<textureSize; j++){
+           for(var k=0; k<4; k++){
+                image[4 * textureSize * i  +  4 * j  +  k] = 255 * imageArr[i][j][k];
+           }
+        }
+    }
+}
 
 function quad(a, b, c, d) {
     /* Each quadrilater is drown as two triangles. */
@@ -101,34 +138,49 @@ function quad(a, b, c, d) {
     pointsArray.push(vertices[a]);
     normalsArray.push(normal);
     //colorsArray.push(vertexColors[a]);
-    //colorsArray.push(vertexColors[a]);    
+    colorsArray.push(vertexColors[a]);        
+    texCoordsArray.push(texCoord[0]);
+
 
     pointsArray.push(vertices[b]);
     normalsArray.push(normal);
     //colorsArray.push(vertexColors[a]);
-    //colorsArray.push(vertexColors[b]);    
+    colorsArray.push(vertexColors[b]);        
+    texCoordsArray.push(texCoord[1]);
+
 
     pointsArray.push(vertices[c]);
     normalsArray.push(normal);
     //colorsArray.push(vertexColors[a]);
-    //colorsArray.push(vertexColors[c]);    
+    colorsArray.push(vertexColors[c]);        
+    texCoordsArray.push(texCoord[2]);
+
+
 
 
     pointsArray.push(vertices[a]);
     normalsArray.push(normal);
     //colorsArray.push(vertexColors[a]);
-    //colorsArray.push(vertexColors[a]);    
+    colorsArray.push(vertexColors[a]);        
+    texCoordsArray.push(texCoord[0]);
+
 
     pointsArray.push(vertices[c]);
     normalsArray.push(normal);
     //colorsArray.push(vertexColors[a]);
-    //colorsArray.push(vertexColors[c]);    
+    colorsArray.push(vertexColors[c]);        
+    texCoordsArray.push(texCoord[2]);
+
 
     pointsArray.push(vertices[d]);
     normalsArray.push(normal);
     //colorsArray.push(vertexColors[a]);
-    //colorsArray.push(vertexColors[d]);    
+    colorsArray.push(vertexColors[d]);  
+    texCoordsArray.push(texCoord[3]);
 }
+
+
+
 
 function colorCube()
 {
@@ -139,6 +191,19 @@ function colorCube()
     quad( 4, 5, 6, 7 );
     quad( 5, 4, 0, 1 );
 }
+
+
+function configureTexture(image) {
+    var texture = gl.createTexture();
+    gl.activeTexture(  gl.TEXTURE0 );
+    gl.bindTexture(    gl.TEXTURE_2D, texture );
+    gl.pixelStorei(    gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(     gl.TEXTURE_2D, 0, gl.RGBA, texSize, texSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.generateMipmap( gl.TEXTURE_2D );
+    gl.texParameteri(  gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR );
+    gl.texParameteri(  gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+}
+
 
 
 window.onload  =  function init() {
@@ -223,6 +288,12 @@ window.onload  =  function init() {
     document.getElementById("shadingModel").onchange =  function(event) {
         shadingModel = parseInt(event.target.value);  // 0 - Gouraud; 1 - Phong; 
         setShadingModel(shadingModel);
+    };
+
+    document.getElementById("textureSize").onchange     =  function(event) {
+        texSize = parseInt(event.target.value);
+        newImage(texSize);
+        configureTexture(image);
     };
 
 
@@ -326,9 +397,9 @@ function setShadingModel(shadingModel){
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW );
 
-    // var vColor = gl.getAttribLocation( program, "vColor" );
-    // gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );     // specify the data type in the vertex shaders;
-    // gl.enableVertexAttribArray( vColor );           // enable the vertex attributes that  are in the shaders;
+    var vColor = gl.getAttribLocation( program, "vColor" );
+    gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );     // specify the data type in the vertex shaders;
+    gl.enableVertexAttribArray( vColor );           // enable the vertex attributes that  are in the shaders;
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
@@ -345,6 +416,17 @@ function setShadingModel(shadingModel){
     var vNormal = gl.getAttribLocation( program, "vNormal" );
     gl.vertexAttribPointer( vNormal, 3, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vNormal );
+
+    var tBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer);
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
+    
+    var vTexCoord = gl.getAttribLocation( program, "vTexCoord");
+    gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vTexCoord);
+
+
+    configureTexture(image);
 
 
     modelViewMatrixLoc   = gl.getUniformLocation( program, "modelViewMatrix" );
