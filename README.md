@@ -117,11 +117,38 @@ Split the window vertically into two parts. One shows the orthographic projectio
 
 #### Solution T4
 
+We use  `gl.viewport ` and  `gl.scissor`  to split the canvas in two parts, one for each of the two projections views. With  `glScissor`  we define a rectangle, called *the scissor box*, in window coordinates. The first two arguments, *x* and *y*, specify the lower left corner of the box. *width* and *height* specify the width and height of the box.
 
+```c
+var render = function() {
+    function renderScene(X, Y, width, height, projectionMatrix) {
+        gl.enable(gl.SCISSOR_TEST);       // Only pixels that lie within the scissor
+        gl.viewport(X, Y, width, height); // box can be modified by drawing; commands;
+        gl.scissor(X, Y, width, height);  // Define the scissor box;
+    	/**                   . . .                         **/    
+        /** . . . usual render() content instructions . . . **/
+    	/**                   . . .                         **/    
+    }
+    
+    // Draw the left scene ( ORTHOGRAPHIC projection ):
+    {
+        projectionMatrix = ortho(left, right, bottom, ytop, zNear, zFar);
+        gl.clearColor(1, 1, 1, 1);
+    	renderScene(0, 0, width/2, height, projectionMatrix);
+    }
+    // Draw the right scene ( PERSPECTIVE projection ):
+    {        
+        const projectionMatrix  =  perspective(fovy, aspect, zNear, zFar);
+        gl.clearColor(1, 1, 1, 1);
+        renderScene(width/2, 0,  width/2, height, projectionMatrix);
+    }
+    requestAnimFrame(render);
+}
+```
 
+So,  the two scenes’ programs receives just  different projection matrixes.
 
-
-
+>   The same near and far sliders are used to set both projections.
 
 
 

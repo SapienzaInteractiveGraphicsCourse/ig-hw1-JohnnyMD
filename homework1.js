@@ -352,7 +352,7 @@ var render = function() {
     const width  = gl.canvas.width;
     const height = gl.canvas.height;
 
-    // draw left scene ( ORTHOGRAPHIC projection )
+    // draw the left scene ( ORTHOGRAPHIC projection )
     {        
         const projectionMatrix  =  ortho(left, right, bottom, ytop, zNear, zFar);
         
@@ -362,7 +362,7 @@ var render = function() {
     }
 
 
-    // draw right scene ( PERSPECTIVE projection )
+    // draw the right scene ( PERSPECTIVE projection )
     {        
         const projectionMatrix  =  perspective(fovy, aspect, zNear, zFar);
         
