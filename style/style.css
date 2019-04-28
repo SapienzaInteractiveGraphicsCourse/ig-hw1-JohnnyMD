@@ -17,7 +17,7 @@ body {
 
 
 #gl-canvas {
-	height 	   : 70vh;
+	height 	   : 65vh;
 
 	text-align : center;
 	padding    : 0;
@@ -103,9 +103,8 @@ canvas {
 /************************************/
 	input[type=range] {
 		height     : 12px;
-		margin     : 2px;
 		margin-top : 1px;
-		margin-bottom: 2em;
+		margin-bottom: 0.6em;
 		width      : 128px;
 		-webkit-appearance : none;
 	}
@@ -242,7 +241,7 @@ input[type=text] {
 	select {
 		margin        : 2px;
 		margin-top    : 1px;
-		margin-bottom : 2em;
+		margin-bottom : 0.4em;
 		margin-right  : 2em;
 		width         : 128px;
 		
@@ -250,7 +249,7 @@ input[type=text] {
 	}
 
 	select > option {
-		color: blue;
+		color      : blue;
 		font-size  : 0.95em;
 	}
 
