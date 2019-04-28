@@ -211,6 +211,9 @@ window.onload  =  function init() {
     // Set the viewport properties
     gl.viewport( 0, 0, canvas.width, canvas.height );
 
+    // Init the aspect
+    aspect = 0.5;   // because the splitted canvas;
+
     // Clear the screen area where to draw (use clip coordinates)(alpha component = 1 --- opaque)
     gl.clearColor( 1.0, 1.0, 1.0,  1.0 );
 
