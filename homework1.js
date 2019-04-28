@@ -47,17 +47,18 @@ const up         = vec3(0.0, 0.2, 0.0);     // the camera orientation (Y)
 
 
 // Lighting and Shading
-var shadingModel = 0;   // 0 - Gouraud; 1 - Phong;
+var defaultShadingModel = "1";                // 0 - Gouraud; 1 - Phong;
+var shadingModel        = parseInt(defaultShadingModel);
 
-var lightPosition     = vec4(-4.0,  4.0,  2.0,  0.0 );
+var lightPosition     = vec4(-1.0,  1.0,  1.0,  0.0 );
 var lightAmbient      = vec4( 0.2,  0.2,  0.2,  1.0 );
-var lightDiffuse      = vec4( 1.0,  1.0,  1.0,  1.0 );
+var lightDiffuse      = vec4( 0.8,  0.8,  0.8,  1.0 );
 var lightSpecular     = vec4( 1.0,  1.0,  1.0,  1.0 );
 
 var materialAmbient   = vec4( 1.0,  0.0,  1.0,  1.0 );
 var materialDiffuse   = vec4( 1.0,  0.8,  0.0,  1.0);
 var materialSpecular  = vec4( 1.0,  0.8,  0.0,  1.0 );
-var materialShininess = 100.0;
+var materialShininess = 32.0;
 
 var ambientColor, diffuseColor, specularColor;
 
@@ -99,33 +100,33 @@ function quad(a, b, c, d) {
 
     pointsArray.push(vertices[a]);
     normalsArray.push(normal);
-    colorsArray.push(vertexColors[a]);
+    //colorsArray.push(vertexColors[a]);
     //colorsArray.push(vertexColors[a]);    
 
     pointsArray.push(vertices[b]);
     normalsArray.push(normal);
-    colorsArray.push(vertexColors[a]);
+    //colorsArray.push(vertexColors[a]);
     //colorsArray.push(vertexColors[b]);    
 
     pointsArray.push(vertices[c]);
     normalsArray.push(normal);
-    colorsArray.push(vertexColors[a]);
+    //colorsArray.push(vertexColors[a]);
     //colorsArray.push(vertexColors[c]);    
 
 
     pointsArray.push(vertices[a]);
     normalsArray.push(normal);
-    colorsArray.push(vertexColors[a]);
+    //colorsArray.push(vertexColors[a]);
     //colorsArray.push(vertexColors[a]);    
 
     pointsArray.push(vertices[c]);
     normalsArray.push(normal);
-    colorsArray.push(vertexColors[a]);
+    //colorsArray.push(vertexColors[a]);
     //colorsArray.push(vertexColors[c]);    
 
     pointsArray.push(vertices[d]);
     normalsArray.push(normal);
-    colorsArray.push(vertexColors[a]);
+    //colorsArray.push(vertexColors[a]);
     //colorsArray.push(vertexColors[d]);    
 }
 
@@ -141,6 +142,8 @@ function colorCube()
 
 
 window.onload  =  function init() {
+    document.getElementById("shadingModel").value = defaultShadingModel;
+
     // Get the canvas object
     canvas = document.getElementById( "gl-canvas" );
 
@@ -163,118 +166,63 @@ window.onload  =  function init() {
     
     /***  Load shaders and initialize attribute buffers ***/
     
-    // Create the program object to identify and hold the two shaders in the application
-    program = initShaders( gl, "vertex-shader", "fragment-shader" );
-    gl.useProgram( program );
-
-    // Push the vertexes and their colors in the corresponding arrays.
-    colorCube();
-
-
-
-    var cBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW );
-
-    var vColor = gl.getAttribLocation( program, "vColor" );
-    gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );     // specify the data type in the vertex shaders;
-    gl.enableVertexAttribArray( vColor );           // enable the vertex attributes that  are in the shaders;
-    
-
-
-    var vBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW );
-
-    var vPosition = gl.getAttribLocation( program, "vPosition" );
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
-
-
-
-    var nBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(normalsArray), gl.STATIC_DRAW );
-
-    var vNormal = gl.getAttribLocation( program, "vNormal" );
-    gl.vertexAttribPointer( vNormal, 3, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vNormal );
-
-
-
-    modelViewMatrixLoc   = gl.getUniformLocation( program, "modelViewMatrix" );
-    projectionMatrixLoc  = gl.getUniformLocation( program, "projectionMatrix" );
-
-    translationVectorLoc = gl.getUniformLocation(program, "t");
-    scaleVectorLoc       = gl.getUniformLocation(program, "s");
-
-
-
-    var ambientProduct   = mult(lightAmbient,  materialAmbient);
-    var diffuseProduct   = mult(lightDiffuse,  materialDiffuse);
-    var specularProduct  = mult(lightSpecular, materialSpecular);
-
-
-    gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"),  flatten(ambientProduct));
-    gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"),  flatten(diffuseProduct) );
-    gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"), flatten(specularProduct) );
-    gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),   flatten(lightPosition) );
-
-    gl.uniform1f(gl.getUniformLocation(program, "shininess"), materialShininess);
+    // Create the program object to identify and hold the two shaders 
+    // in the application, considering the selected shadingModel.
+    setShadingModel(defaultShadingModel);
 
 
 
     // get the range sliders for viewing parameters
-    document.getElementById("range_phi").onchange    = function(event) {
+    document.getElementById("range_phi").oninput        = function(event) {
         phi    = event.target.value * Math.PI / 180.0;
     };
 
-    document.getElementById("range_theta").onchange  = function(event) {
+    document.getElementById("range_theta").oninput      = function(event) {
         theta  = event.target.value * Math.PI / 180.0;
     };
 
-    document.getElementById("range_radius").onchange = function(event) {
+    document.getElementById("range_radius").oninput     = function(event) {
         radius = event.target.value;
     };
 
-    document.getElementById("range_zNear").onchange = function(event) {
+    document.getElementById("range_zNear").oninput      = function(event) {
         zNear = -event.target.value / 2;
     };
 
-    document.getElementById("range_zFar").onchange = function(event) {
+    document.getElementById("range_zFar").oninput       = function(event) {
         zFar = event.target.value / 2;
     };
 
-    document.getElementById("range_fovy").onchange = function(event) {
+    document.getElementById("range_fovy").oninput       = function(event) {
         fovy = event.target.value;
     };
 
 
-    document.getElementById("range_scale").onchange = function(event) {
+    document.getElementById("range_scale").oninput      = function(event) {
         scaleFactor = event.target.value;
         scaleVector = [ scaleFactor, scaleFactor, scaleFactor ]
     };
 
 
-    document.getElementById("range_translateX").onchange =  function(event) {
+    document.getElementById("range_translateX").oninput =  function(event) {
         translationVector[0] = event.target.value;
         console.log("\n translationVector = [" + translationVector + "]");
     };
 
-    document.getElementById("range_translateY").onchange =  function(event) {
+    document.getElementById("range_translateY").oninput =  function(event) {
         translationVector[1] = event.target.value;
         console.log("\n translationVector = [" + translationVector + "]");
     };
 
-    document.getElementById("range_translateZ").onchange =  function(event) {
+    document.getElementById("range_translateZ").oninput =  function(event) {
         translationVector[2] = event.target.value;
         console.log("\n translationVector = [" + translationVector + "]");
     };
 
 
     document.getElementById("shadingModel").onchange =  function(event) {
-        shadingModel = event.target.value;
-        console.log("\n shadingModel = " + shadingModel);
+        shadingModel = parseInt(event.target.value);  // 0 - Gouraud; 1 - Phong; 
+        setShadingModel(shadingModel);
     };
 
 
@@ -308,13 +256,25 @@ var render = function() {
         gl.uniform3fv(scaleVectorLoc, scaleVector);
 
 
+        var ambientProduct   = mult(lightAmbient,  materialAmbient);
+        var diffuseProduct   = mult(lightDiffuse,  materialDiffuse);
+        var specularProduct  = mult(lightSpecular, materialSpecular);
+
+        gl.uniform4fv( gl.getUniformLocation(program, "ambientProduct"),  flatten(ambientProduct)  );
+        gl.uniform4fv( gl.getUniformLocation(program, "diffuseProduct"),  flatten(diffuseProduct)  );
+        gl.uniform4fv( gl.getUniformLocation(program, "specularProduct"), flatten(specularProduct) );
+        gl.uniform4fv( gl.getUniformLocation(program, "lightPosition"),   flatten(lightPosition)   );
+
+        gl.uniform1f( gl.getUniformLocation(program, "shininess"), materialShininess );
+
+
         gl.drawArrays(gl.TRIANGLES, 0, numVertices);
     }
 
 
     const width  = gl.canvas.width;
     const height = gl.canvas.height;
-    const aspect = (width / 2) / height;  // 1;
+    const aspect = (width / 2) / height;  // = 1;
 
     // draw left scene ( ORTHOGRAPHIC projection )
     {
@@ -342,4 +302,54 @@ var render = function() {
 
     requestAnimFrame(render);
     
+}
+
+
+function setShadingModel(shadingModel){
+    if(shadingModel == 0){
+        program = initShaders( gl, "vertex-shader-gouraudShading", "fragment-shader-gouraudShading" );
+    }else{
+        program = initShaders( gl, "vertex-shader-phongShading", "fragment-shader-phongShading" );
+    }
+
+    gl.useProgram( program );
+
+    console.log("\n shadingModel = " + shadingModel);
+    // 0 - Gouraud; 1 - Phong; 
+    
+
+    // Push the vertexes and their colors in the corresponding arrays.
+    colorCube();
+
+
+    var cBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW );
+
+    // var vColor = gl.getAttribLocation( program, "vColor" );
+    // gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );     // specify the data type in the vertex shaders;
+    // gl.enableVertexAttribArray( vColor );           // enable the vertex attributes that  are in the shaders;
+
+    var vBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW );
+
+    var vPosition = gl.getAttribLocation( program, "vPosition" );
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
+
+    var nBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(normalsArray), gl.STATIC_DRAW );
+
+    var vNormal = gl.getAttribLocation( program, "vNormal" );
+    gl.vertexAttribPointer( vNormal, 3, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vNormal );
+
+
+    modelViewMatrixLoc   = gl.getUniformLocation( program, "modelViewMatrix" );
+    projectionMatrixLoc  = gl.getUniformLocation( program, "projectionMatrix" );
+
+    translationVectorLoc = gl.getUniformLocation(program, "t");
+    scaleVectorLoc       = gl.getUniformLocation(program, "s");
 }

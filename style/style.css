@@ -33,6 +33,26 @@ canvas {
 	display: inline;
 }
 
+#split_info {
+	margin-right     : 1.2rem;
+	margin-left      : 1.2rem;
+
+	display          : flex;
+	flex-wrap        : wrap;
+	justify-content  : center;
+
+	background-color : white;
+	color            : #0D0D0D;
+}
+
+	#split_info > #left_split {
+		margin-right : 2.0em; 
+	}
+
+	#split_info > #right_split {
+		margin-left  : 2.0em;
+	}
+
 #control_panel {
 	margin-right: 1.2rem;
 	margin-left : 1.2rem;
@@ -40,8 +60,8 @@ canvas {
 	display     : flex;
 	flex-wrap   : wrap;
 	justify-content: center;
-	
 }
+
 		h1 {
 			font-size	: 1.8em	!important;
 		}
@@ -55,7 +75,11 @@ canvas {
 			line-height     : 1.618em   !important;
 			text-transform  : uppercase !important;
 		}
-		
+
+		h4 {
+			font-size	: 1.15em	!important;
+		}
+
 		p, .text, .text_p, .text_pp, .text_1, .text_2, #chi_siamo > p.text_p, #chi_siamo > p.text_pp, .domanda_risposta > p {
 			font-size	: 1em 			!important;
 			line-height	: 1.618em 		!important;
