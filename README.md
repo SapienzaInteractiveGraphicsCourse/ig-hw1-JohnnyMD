@@ -22,7 +22,7 @@ The **ModelViewMatrix** is computed by:  `modelViewMatrix  = lookAt(eye, at, up)
 -   `up`  -  the point that specifies the way your camera is rotated;
 
 -   `LookAt(eye, at, up)` 
-    ![1552993973693](img\1552993973693.png)
+    ![1552993973693](img/1552993973693.png)
 
     
 
@@ -30,7 +30,7 @@ The viewer volume is controlled by the following parameters:
 
 -   <u>Orthographic Projection</u> case:   `right`, `left`, `top`, `bottom`, `near`, `far`. 
 
-     ![1556478192304](img\1556478192304.png)
+     ![1556478192304](img/1556478192304.png)
 
     -   The **Orthographic Projection Matrix** is computed as following:
          `projectionMatrix  =  ortho(left, right, bottom, ytop, zNear, zFar);`  
@@ -44,7 +44,7 @@ The viewer volume is controlled by the following parameters:
     -   `fovy`  -  field of view along Y axes;  The angle between the top and bottom planes of the clipping volume;
     -   `aspect`  -   ratio (*width divided by height*) of the projection plane;
     -   `near`  and  `far`;
-    -   ![1556480293000](img\1556480293000.png)
+    -   ![1556480293000](img/1556480293000.png)
     -    The **Perspective Projection Matrix** is computed as following:
          `projectionMatrix  =  perspective(fovy, aspect, zNear, zFar);`  
 
@@ -196,7 +196,7 @@ The Gouraud Shading Model is less realistic, but more efficient in terms of calc
 
 On the other side, Phong Shading Model much more realistic, but less efficient in terms of computations (*<u>per-fragment</u> color computation*).  The vertex shader provides the normal and position data as **out** variables to the fragment shader. The fragment shader then interpolates these variables and computes the color. CPU - GPU data transferring overloading is possible for complex object models.
 
-![1556486551227](img\1556486551227.png)
+![1556486551227](img/1556486551227.png)
 
 <u>**Implementation**</u>:
 
