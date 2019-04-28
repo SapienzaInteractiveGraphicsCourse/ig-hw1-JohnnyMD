@@ -58,7 +58,7 @@ gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));`
 
 >   Note:  The splitting procedure for the two different projections are explained bellow, in <u>Task 4</u>;   
 
-
+>   Note:  By default, orthographic projection is used;
 
 ### Task 2
 
@@ -178,13 +178,31 @@ var materialShininess = 32.0;  						// specular component's shininess
 
 
 
+The normals for each vertexes are computed and pushed in the `normalsArray` buffer in the  `quad()`  function;
+
+
+
 ### Task 6
 
 Implement both the Gouraud and the Phong shading models, with a button switching between them.
 
 #### Solution T6
 
+The switching is done by selecting the desired shading model to switch on. A select input element is used instead of the button initially (at this point I had no time to change/fix it).
 
+The Gouraud Shading Model is less realistic, but more efficient in terms of calculations (*<u>per-vertex</u> color computation*).  the vertex shader must determine a color for each vertex and pass the color as an **out** variable to the fragment shader.
+
+![1556486378548](C:\Users\ivanf\AppData\Roaming\Typora\typora-user-images\1556486378548.png)
+
+On the other side, Phong Shading Model much more realistic, but less efficient in terms of computations (*<u>per-fragment</u> color computation*).  The vertex shader provides the normal and position data as **out** variables to the fragment shader. The fragment shader then interpolates these variables and computes the color. CPU - GPU data transferring overloading is possible for complex object models.
+
+![1556486551227](C:\Users\ivanf\AppData\Roaming\Typora\typora-user-images\1556486551227.png)
+
+<u>**Implementation**</u>:
+
+In the HTML file we have two pairs of shaders for the two Shading Models.
+
+The  `function setShadingModel(shadingModel)` is called whenever a different Shading Model is selected (*Phong Model - by default*).  Also it is called in the  `init()`  function with the  `defaultShadingModel`. This function is responsible for the   selecting the right shaders to use for the selected Shading Model.
 
 
 
@@ -194,4 +212,3 @@ Add a procedural texture (your choice) on each face, with the pixel color a comb
 
 #### Solution T7
 
->   TODO . . .
