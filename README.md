@@ -89,7 +89,7 @@ The Translating and Scaling matrixes are declared in the vertex-shaders, after t
                             0.0,  0.0,  0.0, 1.0 );     // Scaling Matrix
 			
 			/** . . . **/
-	
+
 			void main(){
                 /** . . . **/
                 gl_Position = T * S * projectionMatrix * modelViewMatrix * vPosition;
@@ -212,3 +212,17 @@ Add a procedural texture (your choice) on each face, with the pixel color a comb
 
 #### Solution T7
 
+The *Procedural texture mapping* requires much less memory as compared to *image based texture mapping*. There is no image to download or store in RAM or in the GPU’s memory.  Instead, it is calculated at rendering time for each individual fragment. If the calculations are complex, rendering speeds become slower (try to switch the greatest texture size - `Texture Size`  range slider). 
+
+
+
+The basic steps *procedural texture mapping*  that was followed in our case (checkboard texture with different sizes):
+
+1.  When building the model:
+    1.  Assign an appropriate *texture coordinate*, (s,t), to each vertex of a triangle. (This can be skipped if the geometry of a model is used for texture mapping inputs.)
+2.  JavaScript pre-processing for a canvas rendering:
+3.  JavaScript setup each time a model is rendered using a procedural texture map;
+    1.  Select the correct *shader program* with `gl.useProgram()`.
+4.  Shader program
+    1.  In the *vertex shader*, create a `varying` variable that will interpolate the *texture coordinates* across the surface of a triangle. (Or interpolate some other property of the model across the face.)
+    2.  In the *fragment shader*, use the *texture coordinates* (or some other interpolated value) to **calculate** a color.
