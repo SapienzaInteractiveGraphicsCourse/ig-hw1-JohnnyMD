@@ -222,6 +222,8 @@
         <div id="control_panel">
             
             <!-- TRANSLATION range sliders -->
+            <div>
+                
             <div class="form-group">
                 <label for="range_translateX">Translate-X:</label>
                 <input type="range"  id="range_translateX"  name="range_translateX" onchange="updateRangeInput(this)"  min="-10.0"  value="0.0"  max="10.0"  step="0.1">
@@ -250,84 +252,94 @@
                 <input type="text">
             </div>
             <br/>
+            </div>
 
+            <div>
+                <div class="form-group">
+                    <label for="range_phi">Phi:</label>
+                    <input type="range"  id="range_phi"  name="range_phi" onchange="updateRangeInput(this)"  min="-90"  value="25.0"  max="90"  step="1.0">
+                    <input type="text">
+                </div>
+                <br/>
+
+                <div class="form-group">
+                    <label for="range_theta">Theta:</label>
+                    <input type="range"  id="range_theta"  name="range_theta" onchange="updateRangeInput(this)"  min="-90"  value="25.0"  max="90"  step="1.0">
+                    <input type="text">
+                </div>
+                <br/>
+            </div>
             
-            <div class="form-group">
-                <label for="range_phi">Phi:</label>
-                <input type="range"  id="range_phi"  name="range_phi" onchange="updateRangeInput(this)"  min="-90"  value="25.0"  max="90"  step="1.0">
-                <input type="text">
-            </div>
-            <br/>
+            <div>
+                <div class="form-group">
+                    <label for="range_radius">Radius:</label>
+                    <input type="range"  id="range_radius"  name="range_radius" onchange="updateRangeInput(this)"  min="0.00"  value="1.0"  max="10.0"  step="0.1">
+                    <input type="text">
+                </div>
+                <br/>
+                
+                <div class="form-group">
+                    <label for="range_aspect">Aspect:</label>
+                    <input type="range"  id="range_aspect"  name="range_aspect" onchange="updateRangeInput(this)"  min="0.5"  value="1.0"  max="2.0"  step="0.05">
+                    <input type="text">
+                </div>
+                <br/>
 
-            <div class="form-group">
-                <label for="range_theta">Theta:</label>
-                <input type="range"  id="range_theta"  name="range_theta" onchange="updateRangeInput(this)"  min="-90"  value="25.0"  max="90"  step="1.0">
-                <input type="text">
+                <div class="form-group">
+                    <label for="range_fovy">Fovy:</label>
+                    <input type="range"  id="range_fovy"  name="range_fovy" onchange="updateRangeInput(this)"  min="0.0"  value="90.0"  max="120.0"  step="1.0">
+                    <input type="text">
+                </div>
+                <br/>
             </div>
-            <br/>
-            
-            <div class="form-group">
-                <label for="range_radius">Radius:</label>
-                <input type="range"  id="range_radius"  name="range_radius" onchange="updateRangeInput(this)"  min="0.00"  value="1.0"  max="10.0"  step="0.1">
-                <input type="text">
-            </div>
-            <br/>
-            
-            <div class="form-group">
-                <label for="range_aspect">Aspect:</label>
-                <input type="range"  id="range_aspect"  name="range_aspect" onchange="updateRangeInput(this)"  min="0.5"  value="1.0"  max="2.0"  step="0.05">
-                <input type="text">
-            </div>
-            <br/>
 
-            <div class="form-group">
-                <label for="range_fovy">Fovy:</label>
-                <input type="range"  id="range_fovy"  name="range_fovy" onchange="updateRangeInput(this)"  min="0.0"  value="90.0"  max="120.0"  step="1.0">
-                <input type="text">
-            </div>
-            <br/>
+            <div> 
+                <div class="form-group">
+                    <label for="range_zNear">zNear:</label>
+                    <input type="range"  id="range_zNear"  name="range_zNear" onchange="updateRangeInput(this)"  min="-1.0"  value="-1.0"  max="2.0"  step="0.02">
+                    <input type="text">
+                </div>
+                <br/>
 
-            <div class="form-group">
-                <label for="range_zNear">zNear:</label>
-                <input type="range"  id="range_zNear"  name="range_zNear" onchange="updateRangeInput(this)"  min="-1.0"  value="-1.0"  max="2.0"  step="0.02">
-                <input type="text">
-            </div>
-            <br/>
+                <div class="form-group">
+                    <label for="shadingModel">zFar:</label>
+                    <input type="range"  id="range_zFar"  name="range_zFar" onchange="updateRangeInput(this)"  min="2.0001"  value="3.0"  max="5.0"  step="0.02">
+                    <input type="text">
+                </div>
+                <br/>
+            </div> 
 
-            <div class="form-group">
-                <label for="shadingModel">zFar:</label>
-                <input type="range"  id="range_zFar"  name="range_zFar" onchange="updateRangeInput(this)"  min="2.0001"  value="3.0"  max="5.0"  step="0.02">
-                <input type="text">
-            </div>
-            <br/>
+            <div>
+                <!-- Shading model select -->
+                <div class="form-group">
+                    <label for="shadingModel">Shading Model:</label>
+                    <select id="shadingModel" name="shadingModel" oninput="updateRangeInput(this)">
+                        <option value="0" selected="selected">Gouraud</option>
+                        <option value="1">Phong</option>
+                    </select>
+                    <input type="text">
 
+                </div>
+                <br/>
+                
 
-            <!-- Shading model select -->
-            <div class="form-group">
-                <label for="shadingModel">Shading Model:</label>
-                <select id="shadingModel" name="shadingModel">
-                    <option value="0" selected="selected">Gouraud</option>
-                    <option value="1">Phong</option>
-                </select>
+                <!-- Shading model select -->
+                <div class="form-group">
+                    <label for="textureSize">Texture Size:</label>
+                    <select id="textureSize" name="textureSize" oninput="updateRangeInput(this)">
+                        <option value="16" selected="selected">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                        <option value="128">128</option>
+                        <option value="256">256</option>
+                        <option value="512">512</option>
+                        <option value="1024">1024</option>
+                        <option value="2048">2048</option>
+                    </select>
+                    <input type="text">
+                </div>
+                <br/>
             </div>
-            <br/>
-            
-
-            <!-- Shading model select -->
-            <div class="form-group">
-                <label for="textureSize">Texture Size:</label>
-                <select id="textureSize" name="textureSize">
-                    <option value="16" selected="selected">16</option>
-                    <option value="32">32</option>
-                    <option value="64">64</option>
-                    <option value="128">128</option>
-                    <option value="256">256</option>
-                    <option value="512">512</option>
-                    <option value="1024">1024</option>
-                    <option value="2048">2048</option>
-                </select>
-            </div>
-            <br/>
 
         </div>
         <!-- ====================== CONTROL PANEL == FINE =========== -->
