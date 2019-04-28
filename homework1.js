@@ -48,6 +48,7 @@ var defaultShadingModel = "1";                // 0 - Gouraud; 1 - Phong;
 var shadingModel        = parseInt(defaultShadingModel);
 
 var lightPosition     = vec4(-1.0,  1.0,  1.0,  0.0 );
+
 var lightAmbient      = vec4( 0.2,  0.2,  0.2,  1.0 );
 var lightDiffuse      = vec4( 0.8,  0.8,  0.8,  1.0 );
 var lightSpecular     = vec4( 1.0,  1.0,  1.0,  1.0 );

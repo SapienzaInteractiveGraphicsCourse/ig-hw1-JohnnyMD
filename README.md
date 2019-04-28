@@ -158,11 +158,23 @@ Introduce a light source, replace the colors by the properties of the material (
 
 #### Solution T5
 
->   TODO . . .
+We add a point light source  (directional, $4^{th}$ component = $0.0$):
 
+```c
+var lightPosition     = vec4(-1.0,  1.0,  1.0,  0.0 );  // directional source in the 
+														// direction (-1.0, 1.0, 1.0).
+var lightAmbient      = vec4( 0.2,  0.2,  0.2,  1.0 );  
+var lightDiffuse      = vec4( 0.8,  0.8,  0.8,  1.0 );
+var lightSpecular     = vec4( 1.0,  1.0,  1.0,  1.0 );
 
+/*Here we define a small amount of gray ambient reflectivity, yellow diffuse properties, and white specular reflections.*/
+var materialAmbient   = vec4( 1.0,  0.0,  1.0,  1.0 );
+var materialDiffuse   = vec4( 1.0,  0.8,  0.0,  1.0);
+var materialSpecular  = vec4( 1.0,  0.8,  0.0,  1.0 );
+var materialShininess = 32.0;  						// specular component's shininess
+```
 
-
+![1556360515994](C:\Users\ivanf\AppData\Roaming\Typora\typora-user-images\1556360515994.png)
 
 
 
@@ -171,9 +183,6 @@ Introduce a light source, replace the colors by the properties of the material (
 Implement both the Gouraud and the Phong shading models, with a button switching between them.
 
 #### Solution T6
-
->   TODO . . .
-
 
 
 
