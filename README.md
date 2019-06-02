@@ -39,7 +39,7 @@ The viewer volume is controlled by the following parameters:
 
         
 
--   <u>Orthographic Projection</u> case:   
+-   <u>Perspective Projection</u> case:   
 
     -   `fovy`  -  field of view along Y axes;  The angle between the top and bottom planes of the clipping volume;
     -   `aspect`  -   ratio (*width divided by height*) of the projection plane;
